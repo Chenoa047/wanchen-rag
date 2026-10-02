@@ -1,0 +1,11 @@
+{"case_id":"Q1","scope":"300972","question":"万辰集团 2025 年营业收入和归母净利润分别是多少，同比增长多少？","reference":"WANCHEN_Q1_Q7_REFERENCE.md#q1-营业收入与归母净利润"}
+{"case_id":"Q2","scope":"300972","question":"2025 年万辰集团量贩零食与食用菌业务的收入和毛利率分别是多少？","reference":"WANCHEN_Q1_Q7_REFERENCE.md#q2-两类业务收入与毛利率"}
+{"case_id":"Q3","scope":"300972","question":"万辰集团 2025 年末门店数量是多少，报告期内新增与减少门店各多少家？","reference":"WANCHEN_Q1_Q7_REFERENCE.md#q3-门店数量"}
+{"case_id":"Q4","scope":"300972","question":"万辰集团 2025 年销售毛利率、销售费用率与上年相比分别变化多少？","reference":"WANCHEN_Q1_Q7_REFERENCE.md#q4-销售毛利率与销售费用率"}
+{"case_id":"Q5","scope":"300972","question":"万辰集团 2025 年经营活动现金流量净额与净利润是否匹配？","reference":"WANCHEN_Q1_Q7_REFERENCE.md#q5-经营现金流与净利润匹配情况"}
+{"case_id":"Q6","scope":"300972","question":"万辰集团报告中披露了哪些存货、食品安全或门店扩张风险？","reference":"WANCHEN_Q1_Q7_REFERENCE.md#q6-主要经营风险与应对措施"}
+{"case_id":"Q7","scope":"300972","question":"万辰集团管理层对下一年度量贩零食业务的主要经营计划是什么？","reference":"WANCHEN_Q1_Q7_REFERENCE.md#q7-2026-年量贩零食经营计划"}
+{"case_id":"Q8","scope":"all","question":"十家公司 2025 年营业收入和归母净利润如何排名？","reference":"Q8_Q9_REFERENCE.md"}
+{"case_id":"Q9","scope":"all","question":"十家公司 2025 年营业收入同比增速排名如何，哪家增长最快、哪家出现下滑？","reference":"Q8_Q9_REFERENCE.md"}
+{"case_id":"Q10","scope":"300972,300783,603719,603777","question":"万辰集团、三只松鼠、良品铺子和来伊份的渠道模式及线下门店策略有何不同？","reference":"Q10_REFERENCE.md"}
+{"case_id":"Q11","scope":"300972","question":"万辰集团审计报告称 2025 年营业收入为 5,145,914.86 万元，主要财务指标表称为 51,459,148,553.51 元，两者是否矛盾？","reference":"WANCHEN_Q1_Q7_REFERENCE.md#附加题-q11-单位陷阱"}

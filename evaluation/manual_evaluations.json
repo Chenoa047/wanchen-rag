@@ -1,0 +1,93 @@
+[
+  {
+    "case_id": "Q1",
+    "route": "单公司 RRF top-8",
+    "answer_status": "正确",
+    "evaluation": "营业收入、归母净利润及两项同比均与人工参考答案一致，引用可核查。",
+    "error_type": ""
+  },
+  {
+    "case_id": "Q2",
+    "route": "单公司 RRF top-8",
+    "answer_status": "正确",
+    "evaluation": "两类业务收入和毛利率正确，区分了业务类型与分部报告口径。",
+    "error_type": ""
+  },
+  {
+    "case_id": "Q3",
+    "route": "单公司 RRF top-8",
+    "answer_status": "正确",
+    "evaluation": "期初、新增、减少与期末门店数正确，算术校验成立。",
+    "error_type": ""
+  },
+  {
+    "case_id": "Q4",
+    "route": "单公司 RRF top-8",
+    "answer_status": "正确",
+    "evaluation": "销售毛利率及销售费用率计算正确，百分比变化正确表述为百分点。",
+    "error_type": ""
+  },
+  {
+    "case_id": "Q5",
+    "route": "单公司 RRF top-8",
+    "answer_status": "正确",
+    "evaluation": "使用合并净利润口径，差额、现金含量及结论与参考答案一致。",
+    "error_type": ""
+  },
+  {
+    "case_id": "Q6",
+    "route": "单公司 RRF top-8",
+    "answer_status": "部分正确",
+    "evaluation": "正确回答了库存周转、食用菌食品安全、市场开拓和门店选址风险，但未覆盖量贩零食销售环节的食品安全风险及上游供应商、突发事件机制等应对措施。",
+    "error_type": "未召回"
+  },
+  {
+    "case_id": "Q7",
+    "route": "单公司 RRF top-8",
+    "answer_status": "部分正确",
+    "evaluation": "正确覆盖高质量扩张和供应链合作，但召回文本在第三点中断，未覆盖品类共创、会员与品牌建设、万店规模人才梯队等后续计划。",
+    "error_type": "未召回"
+  },
+  {
+    "case_id": "Q8",
+    "route": "RRF top-8 基线",
+    "answer_status": "部分正确",
+    "evaluation": "模型正确识别现有材料只覆盖 5/10 家，未编造其他公司数据，但只能给出 5 家的局部排名，未完成十家全景问题。",
+    "error_type": "跨公司覆盖不足"
+  },
+  {
+    "case_id": "Q8",
+    "route": "分层召回，每公司2块",
+    "answer_status": "正确",
+    "evaluation": "10 家公司营业收入与归母净利润的数值、排名及正负号均与人工参考答案一致。",
+    "error_type": ""
+  },
+  {
+    "case_id": "Q9",
+    "route": "RRF top-8 基线",
+    "answer_status": "部分正确",
+    "evaluation": "模型没有在证据不足时补全数据，但有效排名仅包含 4 家公司，遗漏多家增长或下滑公司，未完成十家对比。",
+    "error_type": "跨公司覆盖不足"
+  },
+  {
+    "case_id": "Q9",
+    "route": "分层召回，每公司2块",
+    "answer_status": "正确",
+    "evaluation": "10 家公司营收同比排名正确，正确识别增长最快公司与 5 家下滑公司，并说明甘源食品的推算口径。",
+    "error_type": ""
+  },
+  {
+    "case_id": "Q10",
+    "route": "指定公司分层召回，每公司2块",
+    "answer_status": "部分正确",
+    "evaluation": "四家公司的渠道类型和主要策略对比正确，但每家仅 2 块材料未覆盖期末门店数、直营/加盟结构、良品铺子关店 719 家以及来伊份向加盟倾斜等关键细节。",
+    "error_type": "未召回"
+  },
+  {
+    "case_id": "Q11",
+    "route": "单公司 RRF top-8",
+    "answer_status": "正确",
+    "evaluation": "正确完成万元与元的换算，并将 46.49 元差异解释为四舍五入尾差。",
+    "error_type": ""
+  }
+]
