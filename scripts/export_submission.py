@@ -1,4 +1,4 @@
-"""将既有评测导出为 GitHub 可直接阅读的作业；不调用模型或读取凭据。"""
+"""将既有评测导出为可直接阅读的报告；不调用模型或读取凭据。"""
 from __future__ import annotations
 
 import csv
@@ -37,10 +37,10 @@ def export_submission(root: Path) -> None:
         "原有检索评测查询与回答查询可能不同，未记录的历史排名不补造。"
     )
     review = [
-        "# 老师查阅入口：逐题答案与评价", "",
-        "无需下载、安装 Python 或配置密钥，可直接在 GitHub 阅读本页。", "",
+        "# 评测结果", "",
+        "本页汇总各题的模型回答、人工评价、错误分析及对应证据。", "",
         "[返回项目首页](../README.md) · [页面截图](../README.md#页面截图) · "
-        "[一页结论](ONE_PAGE_CONCLUSION.md) · [原始评测汇总](results.csv)", "",
+        "[评测结论](ONE_PAGE_CONCLUSION.md) · [原始评测汇总](results.csv)", "",
         "10 家公司，10 道正式题（Q1–Q10），Q11 为附加单位陷阱题。"
         "Q8、Q9 各有基线和分层召回两条路线，因此共有 13 条回答记录。", "",
         provenance, "",
