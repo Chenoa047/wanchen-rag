@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 from collections.abc import Sequence
+from typing import TYPE_CHECKING
 
-from wanchen_rag.hybrid import HybridResult
+if TYPE_CHECKING:
+    from wanchen_rag.hybrid import HybridResult
 
 
 SYSTEM_PROMPT = """你是上市公司财报问答助手。只能依据提供的检索材料回答。

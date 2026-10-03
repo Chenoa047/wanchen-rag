@@ -2,10 +2,14 @@ from __future__ import annotations
 
 import csv
 import json
+import sys
 from pathlib import Path
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(PROJECT_ROOT / "src"))
+from wanchen_rag.evaluation import generation_succeeded, evaluation_matches  # noqa: E402
+
 EVALUATION_DIR = PROJECT_ROOT / "evaluation"
 
 
@@ -75,6 +79,7 @@ def main() -> int:
     )
     answer_keys = {
         (str(record["case_id"]), str(record["route"])) for record in model_answers
+        if generation_succeeded(record)
     }
     manual_evaluations = json.loads(
         (EVALUATION_DIR / "manual_evaluations.json").read_text(encoding="utf-8")
@@ -83,11 +88,13 @@ def main() -> int:
         (str(record["case_id"]), str(record["route"])): record
         for record in manual_evaluations
     }
+    valid_evaluations = {}
 
     for answer in model_answers:
         key = (str(answer["case_id"]), str(answer["route"]))
         evaluation = evaluations_by_key.get(key)
-        if evaluation:
+        if evaluation_matches(answer, evaluation):
+            valid_evaluations[key] = evaluation
             answer["manual_evaluation"] = evaluation["answer_status"]
             answer["evaluation_note"] = evaluation["evaluation"]
             answer["error_type"] = evaluation["error_type"]
@@ -97,8 +104,8 @@ def main() -> int:
 
     for row in rows:
         key = (row["case_id"], answer_route(row["case_id"], row["route"]))
-        evaluation = evaluations_by_key.get(key)
-        if evaluation:
+        evaluation = valid_evaluations.get(key)
+        if evaluation and key in answer_keys:
             row["answer_status"] = str(evaluation["answer_status"])
             row["evaluation"] = str(evaluation["evaluation"])
             row["error_type"] = str(evaluation["error_type"])
@@ -106,8 +113,8 @@ def main() -> int:
             row["answer_status"] = "已生成，待人工评价"
             row["evaluation"] = "待评价"
         else:
-            row["answer_status"] = "未生成（仅召回对照）"
-            row["evaluation"] = "本路线仅保留召回记录"
+            row["answer_status"] = "无成功回答"
+            row["evaluation"] = "仅召回对照或接口请求失败，不能套用历史人工评价"
 
     output_path = EVALUATION_DIR / "results.csv"
     with output_path.open("w", encoding="utf-8-sig", newline="") as stream:

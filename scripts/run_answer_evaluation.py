@@ -24,6 +24,7 @@ from wanchen_rag.answering import citation, generate_answer  # noqa: E402
 from wanchen_rag.bm25 import load_index  # noqa: E402
 from wanchen_rag.embedding import VectorIndex  # noqa: E402
 from wanchen_rag.hybrid import HybridIndex  # noqa: E402
+from wanchen_rag.evaluation import generation_succeeded  # noqa: E402
 
 
 MAX_API_ATTEMPTS = 3
@@ -44,6 +45,14 @@ ROUTE_ORDER = {
 
 def record_key(case_id: str, route: str) -> str:
     return f"{case_id}|{route}"
+
+
+def routes_for_scope(scope: str) -> tuple[str, ...]:
+    if scope == "all":
+        return ("RRF top-8 基线", "分层召回，每公司2块")
+    if "," in scope:
+        return ("指定公司分层召回，每公司2块",)
+    return ("单公司 RRF top-8",)
 
 
 def load_saved_records(output_path: Path) -> dict[str, dict[str, object]]:
@@ -107,6 +116,21 @@ def request_answer_with_retry(
 
 
 def main() -> int:
+    with (PROJECT_ROOT / "evaluation" / "questions.jsonl").open(encoding="utf-8") as stream:
+        questions = [json.loads(line) for line in stream]
+    output_path = PROJECT_ROOT / "evaluation" / "model_answers.json"
+    try:
+        records_by_key = load_saved_records(output_path)
+    except (json.JSONDecodeError, ValueError) as exc:
+        print(f"无法读取已有结果：{exc}")
+        return 3
+    if all(
+        generation_succeeded(records_by_key.get(record_key(str(question["case_id"]), route)))
+        for question in questions for route in routes_for_scope(str(question["scope"]))
+    ):
+        print("全部回答路线已有成功结果，无需加载模型或调用 API。")
+        return 0
+
     api_key = os.environ.get("DEEPSEEK_API_KEY")
     if not api_key:
         print("未检测到 DEEPSEEK_API_KEY。请由您本人在当前终端配置后重试。")
@@ -131,32 +155,15 @@ def main() -> int:
         ),
     )
 
-    with (PROJECT_ROOT / "evaluation" / "questions.jsonl").open(
-        encoding="utf-8"
-    ) as stream:
-        questions = [json.loads(line) for line in stream]
-
-    output_path = PROJECT_ROOT / "evaluation" / "model_answers.json"
-    try:
-        records_by_key = load_saved_records(output_path)
-    except (json.JSONDecodeError, ValueError) as exc:
-        print(f"无法读取已有结果：{exc}")
-        return 3
-
     for question in questions:
         case_id = str(question["case_id"])
         scope = str(question["scope"])
-        if scope == "all":
-            routes = ("RRF top-8 基线", "分层召回，每公司2块")
-        elif "," in scope:
-            routes = ("指定公司分层召回，每公司2块",)
-        else:
-            routes = ("单公司 RRF top-8",)
+        routes = routes_for_scope(scope)
 
         for route in routes:
             key = record_key(case_id, route)
             existing = records_by_key.get(key)
-            if existing and existing.get("answer") and not existing.get("error_type"):
+            if generation_succeeded(existing):
                 print(f"{case_id} {route} 已有成功结果，跳过。", flush=True)
                 continue
 
@@ -214,7 +221,9 @@ def main() -> int:
                 "sources": [citation(result.chunk) for result in results],
                 "chunk_ids": [result.chunk["chunk_id"] for result in results],
                 "manual_evaluation": manual_evaluation,
-                "error_type": error_type,
+                "generation_status": "failed" if error_type else "success",
+                "generation_error": error_type,
+                "error_type": "",
             }
             save_records(output_path, records_by_key, questions)
 

@@ -2,12 +2,16 @@ from __future__ import annotations
 
 import csv
 import hashlib
+import sys
 from pathlib import Path
 
 from pypdf import PdfReader
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(PROJECT_ROOT / "src"))
+from wanchen_rag.paths import resolve_report_path  # noqa: E402
+
 MANIFEST_PATH = PROJECT_ROOT / "data_manifest.csv"
 COMPANY_ALIASES = {
     "300972": ("万辰集团", "福建万辰食品集团股份有限公司"),
@@ -28,7 +32,7 @@ def normalized(text: str) -> str:
 
 def validate_row(row: dict[str, str]) -> list[str]:
     errors: list[str] = []
-    pdf_path = Path(row["local_path"])
+    pdf_path = resolve_report_path(row, PROJECT_ROOT)
 
     if not pdf_path.is_file():
         return ["文件不存在"]

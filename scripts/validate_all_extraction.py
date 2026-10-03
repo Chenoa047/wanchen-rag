@@ -2,10 +2,14 @@ from __future__ import annotations
 
 import csv
 import json
+import sys
 from pathlib import Path
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(PROJECT_ROOT / "src"))
+from wanchen_rag.paths import resolve_report_path  # noqa: E402
+
 REQUIRED_METADATA = {
     "company_name",
     "stock_code",
@@ -51,7 +55,7 @@ def main() -> int:
                 if chunk["stock_code"] != row["stock_code"]:
                     errors.append("股票代码串库")
                     break
-                if chunk["source_pdf"] != row["local_path"]:
+                if Path(str(chunk["source_pdf"])).resolve() != resolve_report_path(row, PROJECT_ROOT).resolve():
                     errors.append("来源文件串库")
                     break
         except FileNotFoundError as error:
@@ -78,4 +82,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

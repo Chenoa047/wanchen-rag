@@ -9,6 +9,8 @@ from typing import Iterable, Sequence
 
 import pdfplumber
 
+from wanchen_rag.paths import resolve_report_path
+
 
 RUNNING_HEADER = re.compile(r"^.*2025\s*年年度报告全文$")
 PAGE_NUMBER = re.compile(r"^\d+$")
@@ -200,7 +202,7 @@ def load_metadata(manifest_path: Path, stock_code: str) -> ReportMetadata:
                     company_name=row["company_name"],
                     report_year=int(row["report_year"]),
                     report_type=row["report_type"],
-                    source_pdf=row["local_path"],
+                    source_pdf=str(resolve_report_path(row, manifest_path.parent).resolve()),
                 )
     raise ValueError(f"清单中没有股票代码 {stock_code}")
 

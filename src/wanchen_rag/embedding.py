@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 from typing import Iterator
 
@@ -9,6 +10,7 @@ import torch
 from sentence_transformers import SentenceTransformer
 
 from wanchen_rag.bm25 import read_chunks, searchable_text
+from wanchen_rag.paths import resolve_chunks_path
 
 
 MODEL_NAME = "Qwen/Qwen3-Embedding-0.6B"
@@ -122,7 +124,7 @@ def build_vector_index(
         "count": count,
         "dimension": int(matrix.shape[1]),
         "dtype": "float32",
-        "chunks_path": str(chunks_path.resolve()),
+        "chunks_path": os.path.relpath(chunks_path.resolve(), metadata_path.parent.resolve()),
         "device_used": str(model.device),
         "batch_size": batch_size,
     }
@@ -140,7 +142,7 @@ class VectorIndex:
     ) -> None:
         self.metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
         self.embeddings = np.load(embeddings_path, mmap_mode="r")
-        self.chunks = list(read_chunks(Path(self.metadata["chunks_path"])))
+        self.chunks = list(read_chunks(resolve_chunks_path(self.metadata, metadata_path)))
         if len(self.chunks) != self.embeddings.shape[0]:
             raise ValueError("向量数量与检索块数量不一致")
         self.model = load_model(cache_dir, device=device, local_files_only=True)
